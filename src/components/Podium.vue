@@ -63,15 +63,18 @@ export default Vue.extend({
   props: {
     first: {
       type: Object as () => PeriodMatchPlayer,
-      required: true,
+      required: false,
+      default: null,
     },
     second: {
       type: Object as () => PeriodMatchPlayer,
-      required: true,
+      required: false,
+      default: null,
     },
     third: {
       type: Object as () => PeriodMatchPlayer,
-      required: true,
+      required: false,
+      default: null,
     },
   },
 })
