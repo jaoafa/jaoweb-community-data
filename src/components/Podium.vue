@@ -5,11 +5,12 @@
         <div class="podium-frame"></div>
         <div class="podium-frame">
           <v-img
+            v-if="first"
             :src="
-              'https://crafatar.com/avatars/' + second.uuid + '?size=40&overlay'
+              'https://crafatar.com/avatars/' + first.uuid + '?size=50&overlay'
             "
-            height="70"
-            width="70"
+            height="50"
+            width="50"
             class="podium-image"
           />
         </div>
@@ -18,27 +19,29 @@
       <div class="podium-row">
         <div class="podium-frame">
           <v-img
+            v-if="second"
             :src="
-              'https://crafatar.com/avatars/' + first.uuid + '?size=40&overlay'
+              'https://crafatar.com/avatars/' + second.uuid + '?size=50&overlay'
             "
-            height="70"
-            width="70"
+            height="50"
+            width="50"
             class="podium-image"
           />
         </div>
-        <div class="podium-block"></div>
+        <div class="podium-block">1</div>
         <div class="podium-frame"></div>
       </div>
       <div class="podium-row">
-        <div class="podium-block"></div>
+        <div class="podium-block">2</div>
         <div class="podium-block"></div>
         <div class="podium-frame">
           <v-img
+            v-if="third"
             :src="
-              'https://crafatar.com/avatars/' + third.uuid + '?size=40&overlay'
+              'https://crafatar.com/avatars/' + third.uuid + '?size=50&overlay'
             "
-            height="70"
-            width="70"
+            height="50"
+            width="50"
             class="podium-image"
           />
         </div>
@@ -46,7 +49,7 @@
       <div class="podium-row">
         <div class="podium-block"></div>
         <div class="podium-block"></div>
-        <div class="podium-block"></div>
+        <div class="podium-block">3</div>
       </div>
     </div>
   </div>
@@ -54,7 +57,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { PeriodMatchPlayer } from '~/api/models/periodmatch-result'
+import { PeriodMatchPlayer } from '~/api/models/periodmatch'
 export default Vue.extend({
   name: 'PodiumComponent',
   props: {
@@ -80,9 +83,8 @@ export default Vue.extend({
 }
 
 .podium-frame {
-  background-color: #eee;
-  height: 70px;
-  width: 150px;
+  height: 50px;
+  width: 120px;
   margin: 0;
   padding: 0;
   border: none !important;
@@ -90,11 +92,14 @@ export default Vue.extend({
 
 .podium-block {
   background-color: #000;
-  height: 70px;
-  width: 150px;
+  height: 50px;
+  width: 120px;
   margin: 0;
   padding: 0;
   border: none !important;
+  color: white;
+  font-size: 2em;
+  text-align: center;
 }
 
 .podium-row {
@@ -104,5 +109,6 @@ export default Vue.extend({
 .podium-wrapper {
   display: flex;
   justify-content: center;
+  margin-bottom: 10px;
 }
 </style>

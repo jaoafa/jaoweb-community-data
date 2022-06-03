@@ -2,7 +2,7 @@ import { Express, Request, Response } from 'express'
 import { RowDataPacket } from 'mysql2/promise'
 import EndPoint from '~/api/lib/EndPoint'
 import getDB from '~/api/lib/getDB'
-import PeriodMatchResult from '~/api/models/periodmatch-result'
+import PeriodMatchResult from '~/api/models/periodmatch'
 
 /**
  * GET /api/ranking/periodmatch

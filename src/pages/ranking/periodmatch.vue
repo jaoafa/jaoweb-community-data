@@ -2,34 +2,108 @@
   <v-container fluid>
     <h2>ピリオドマッチランキング</h2>
 
+    <v-select
+      v-model="category"
+      label="表示するカテゴリ"
+      :items="categories"
+      outlined
+      prepend-icon="mdi-format-letter-matches"
+      @change="fetch()"
+    >
+      <template #item="{ item }"> {{ item }} 秒 </template>
+      <template #selection="{ item }"> {{ item }} 秒 </template>
+    </v-select>
+
+    <Podium
+      :first="podium.first"
+      :second="podium.second"
+      :third="podium.third"
+    />
+
     <v-card tile>
-      <v-list>
-        <v-list-item-group v-model="selectedItem" color="primary">
-          <v-list-item v-for="item in items" :key="item.id">
-            <v-list-item-avatar>
-              {{ item.rank }}
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title v-text="item.name"></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :items-per-page="50"
+        :loading="loading"
+        class="elevation-1"
+      >
+        <template #[`item.player.mcid`]="{ item }">
+          <a :href="'https://users.jaoafa.com/' + item.player.uuid">
+            {{ item.player.mcid }}
+          </a>
+        </template>
+        <template #[`item.start_time`]="{ item }">
+          {{ formatDate(new Date(item.start_time), 'yyyy/MM/dd HH:mm:ss') }}
+        </template>
+      </v-data-table>
     </v-card>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import PeriodMatchResult from '~/api/models/periodmatch-result'
+import { DataTableHeader } from 'vuetify'
+import PeriodMatchResult, { PeriodMatchPlayer } from '~/api/models/periodmatch'
+
+interface PodiumProp {
+  first: PeriodMatchPlayer | null
+  second: PeriodMatchPlayer | null
+  third: PeriodMatchPlayer | null
+}
 
 export default Vue.extend({
   name: 'RankingPeriodMatchPage',
   data(): {
+    headers: DataTableHeader[]
     items: PeriodMatchResult[]
+    category: number
+    categories: number[]
+    podium: PodiumProp
+    loading: boolean
   } {
     return {
+      headers: [
+        {
+          text: '順位',
+          align: 'center',
+          sortable: true,
+          value: 'rank',
+        },
+        {
+          text: '名前',
+          align: 'center',
+          sortable: true,
+          value: 'player.mcid',
+        },
+        {
+          text: '成功',
+          align: 'center',
+          sortable: false,
+          value: 'success',
+        },
+        {
+          text: '失敗',
+          align: 'center',
+          sortable: false,
+          value: 'failure',
+        },
+        {
+          text: '実施日時',
+          align: 'center',
+          sortable: false,
+          value: 'start_time',
+        },
+      ],
       items: [],
+      category: 60,
+      categories: [-1, 0, 1, 10, 20, 30, 60, 100, 300],
+      podium: {
+        first: null,
+        second: null,
+        third: null,
+      },
+      loading: true,
     }
   },
   head() {
@@ -46,10 +120,25 @@ export default Vue.extend({
     fetch() {
       this.items = []
 
+      this.loading = true
       this.$axios
-        .get('/api/ranking/periodmatch/')
+        .get(`/api/ranking/periodmatch/${this.category}`)
         .then((response: { data: PeriodMatchResult[] }) => {
           this.items = response.data
+
+          this.podium = {
+            first: this.items.length > 0 ? this.items[0].player : null,
+            second: this.items.length > 1 ? this.items[1].player : null,
+            third: this.items.length > 2 ? this.items[2].player : null,
+          }
+
+          this.loading = false
+        })
+        .catch((error: any) => {
+          this.loading = false
+          alert('ピリオドマッチランキングの取得に失敗しました。')
+          // eslint-disable-next-line no-console
+          console.error(error)
         })
     },
     getMinecraftAvatar(uuid: string) {
@@ -57,6 +146,16 @@ export default Vue.extend({
         return '/community/jaoafa.png'
       }
       return `https://crafatar.com/avatars/${uuid}?size=40&overlay`
+    },
+    formatDate(date: Date, format: string): string {
+      format = format.replace(/yyyy/g, String(date.getFullYear()))
+      format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2))
+      format = format.replace(/dd/g, ('0' + date.getDate()).slice(-2))
+      format = format.replace(/HH/g, ('0' + date.getHours()).slice(-2))
+      format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2))
+      format = format.replace(/ss/g, ('0' + date.getSeconds()).slice(-2))
+      format = format.replace(/SSS/g, ('00' + date.getMilliseconds()).slice(-3))
+      return format
     },
   },
 })
