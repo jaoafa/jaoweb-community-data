@@ -28,7 +28,7 @@ export default class GetCitiesEndPoint extends EndPoint {
         id: row.id,
         name: row.name,
         nameRuby: row.namekana,
-        regionName: row.region_name,
+        regionName: row.regionname,
         owner: {
           mcid: row.player,
           uuid: row.uuid,

@@ -3,7 +3,7 @@
     <h2>登録自治体一覧</h2>
 
     <v-row>
-      <v-col cols="6">
+      <v-col cols="4">
         <v-card tile>
           <v-list>
             <v-list-item-group v-model="selectedItem" color="primary">
@@ -28,8 +28,50 @@
           </v-list>
         </v-card>
       </v-col>
-      <v-col v-if="getSelectCity() != null" cols="6">
-        <h3 class="text-center text-h4">{{ getSelectCity().name }}</h3>
+
+      <v-col v-if="getSelectCity() != null" cols="8">
+        <h2 class="text-h4 city-owner-text">
+          <span class="city-border" />
+          <span class="city-title">{{ getSelectCity().name }}</span>
+          <span class="city-by">by</span>
+          <a
+            class="city-owner"
+            :href="`https://users.jaoafa.com/${getSelectCity().owner.uuid}`"
+          >
+            <v-avatar class="city-avatar">
+              <v-img
+                :src="getMinecraftAvatar(getSelectCity().owner.uuid)"
+              ></v-img>
+            </v-avatar>
+            {{ getSelectCity().owner.mcid }}
+          </a>
+        </h2>
+
+        <v-row class="mt-5">
+          <v-col cols="6">
+            <v-text-field
+              readonly
+              :value="getSelectCity().regionName"
+              prepend-inner-icon="mdi-pound"
+              append-icon="mdi-clipboard-outline"
+              solo
+              @click:append="copyRegionName()"
+            ></v-text-field>
+
+            <h3>自治体の概要</h3>
+            <v-textarea solo readonly :value="getSelectCity().summary" />
+
+            <h3>自治体名称の由来</h3>
+            <v-textarea solo readonly :value="getSelectCity().nameOrigin" />
+          </v-col>
+          <v-col cols="6">
+            <v-img src="assets/dummy.png" />
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <ChangeLogTimeline />
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -77,6 +119,37 @@ export default Vue.extend({
     getSelectCity() {
       return this.items[parseInt(this.selectedItem, 10)]
     },
+    copyRegionName() {
+      const text = this.getSelectCity().regionName
+      this.$copyText(text)
+        .then(() => alert(`「${text}」をコピーしました。`))
+        .catch(() => alert(`「${text}」をコピーできませんでした。`))
+    },
   },
 })
 </script>
+
+<style>
+.city-border {
+  border: 4px solid #ffb41d;
+  border-radius: 1em;
+}
+
+.city-title {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.city-avatar {
+  margin-right: 10px;
+  border: 1px solid #7a7a7a;
+}
+
+.city-owner {
+  background-color: rgb(255 180 29);
+  padding: 8px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+}
+</style>

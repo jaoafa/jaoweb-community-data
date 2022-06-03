@@ -97,7 +97,7 @@ const config: NuxtConfig = {
     '@nuxtjs/vuetify',
   ],
 
-  modules: ['@nuxtjs/axios'],
+  modules: ['@nuxtjs/axios', 'nuxt-clipboard2'],
 
   axios: {
     baseURL: '/',
