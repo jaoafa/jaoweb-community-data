@@ -30,22 +30,26 @@
       </v-col>
 
       <v-col v-if="getSelectCity() != null" cols="8">
-        <h2 class="text-h4 city-owner-text">
-          <span class="city-border" />
-          <span class="city-title">{{ getSelectCity().name }}</span>
-          <span class="city-by">by</span>
-          <a
-            class="city-owner"
-            :href="`https://users.jaoafa.com/${getSelectCity().owner.uuid}`"
-          >
-            <v-avatar class="city-avatar">
-              <v-img
-                :src="getMinecraftAvatar(getSelectCity().owner.uuid)"
-              ></v-img>
-            </v-avatar>
-            {{ getSelectCity().owner.mcid }}
-          </a>
-        </h2>
+        <v-row>
+          <v-col cols="12">
+            <h2 class="text-h4 city-owner-text">
+              <span class="city-border" />
+              <span class="city-title">{{ getSelectCity().name }}</span>
+              <span class="city-by">by</span>
+              <a
+                class="city-owner"
+                :href="`https://users.jaoafa.com/${getSelectCity().owner.uuid}`"
+              >
+                <v-avatar class="city-avatar">
+                  <v-img
+                    :src="getMinecraftAvatar(getSelectCity().owner.uuid)"
+                  ></v-img>
+                </v-avatar>
+                {{ getSelectCity().owner.mcid }}
+              </a>
+            </h2>
+          </v-col>
+        </v-row>
 
         <v-row class="mt-5">
           <v-col cols="6">
@@ -70,7 +74,9 @@
         </v-row>
 
         <v-row>
-          <ChangeLogTimeline />
+          <v-col cols="12">
+            <ChangeLogTimeline />
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
