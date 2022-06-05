@@ -162,7 +162,7 @@ export default Vue.extend({
   position: absolute;
   top: -37px;
   left: 33px;
-  width: 300px;
+  width: 200px;
   transform-origin: 0% 50%;
   transform: rotate(-45deg);
 }
