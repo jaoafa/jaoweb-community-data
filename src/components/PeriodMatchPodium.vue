@@ -59,7 +59,7 @@
 import Vue from 'vue'
 import { PeriodMatchPlayer } from '~/api/models/periodmatch'
 export default Vue.extend({
-  name: 'PodiumComponent',
+  name: 'PeriodMatchPodiumComponent',
   props: {
     first: {
       type: Object as () => PeriodMatchPlayer,

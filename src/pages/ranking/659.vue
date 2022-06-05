@@ -1,26 +1,28 @@
 <template>
   <v-container fluid>
-    <h2>ピリオドマッチランキング</h2>
+    <h2>659ランキング</h2>
 
-    <p>PeriodMatch (無印) のデータはこのランキングに含まれていません。</p>
+    <p>
+      jMS Gamers Club #659
+      で行われている、特定時刻にどれだけ差無く投稿できるかを競っているアレのランキングです。
+    </p>
 
     <v-select
       v-model="category"
       label="表示するカテゴリ"
       :items="categories"
       outlined
+      item-text="name"
+      item-value="categoryId"
       prepend-icon="mdi-format-letter-matches"
-      @change="fetch()"
+      return-object
+      @change="fetchRecords()"
     >
-      <template #item="{ item }"> {{ item }} 秒 </template>
-      <template #selection="{ item }"> {{ item }} 秒 </template>
+      <template #item="{ item }"> {{ item.name }} ({{ item.base }}) </template>
+      <template #selection="{ item }">
+        {{ item.name }} ({{ item.base }})
+      </template>
     </v-select>
-
-    <PeriodMatchPodium
-      :first="podium.first"
-      :second="podium.second"
-      :third="podium.third"
-    />
 
     <v-card tile>
       <v-data-table
@@ -30,10 +32,8 @@
         :loading="loading"
         class="elevation-1"
       >
-        <template #[`item.player.mcid`]="{ item }">
-          <a :href="'https://users.jaoafa.com/' + item.player.uuid">
-            {{ item.player.mcid }}
-          </a>
+        <template #[`item.user`]="{ item }">
+          {{ item.user.userName }}#{{ item.user.discriminator }}
         </template>
         <template #[`item.start_time`]="{ item }">
           {{ formatDate(new Date(item.start_time), 'yyyy/MM/dd HH:mm:ss') }}
@@ -46,22 +46,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import { DataTableHeader } from 'vuetify'
-import PeriodMatchResult, { PeriodMatchPlayer } from '~/api/models/periodmatch'
-
-interface PodiumProp {
-  first: PeriodMatchPlayer | null
-  second: PeriodMatchPlayer | null
-  third: PeriodMatchPlayer | null
-}
+import {
+  Api659CategoryResponse,
+  Api659RecordResponse,
+} from '~/api/models/659-api-result'
 
 export default Vue.extend({
   name: 'RankingPeriodMatchPage',
   data(): {
     headers: DataTableHeader[]
-    items: PeriodMatchResult[]
-    category: number
-    categories: number[]
-    podium: PodiumProp
+    items: Api659RecordResponse[]
+    category: Api659CategoryResponse | null
+    categories: Api659CategoryResponse[]
     loading: boolean
   } {
     return {
@@ -73,66 +69,70 @@ export default Vue.extend({
           value: 'rank',
         },
         {
-          text: '名前',
+          text: 'ユーザー',
           align: 'center',
           sortable: true,
-          value: 'player.mcid',
+          value: 'user',
         },
         {
-          text: '成功',
+          text: '時間差 (ms)',
           align: 'center',
           sortable: false,
-          value: 'success',
+          value: 'diff',
         },
         {
-          text: '失敗',
+          text: '投稿日',
           align: 'center',
           sortable: false,
-          value: 'failure',
-        },
-        {
-          text: '実施日時',
-          align: 'center',
-          sortable: false,
-          value: 'start_time',
+          value: 'postedAt',
         },
       ],
       items: [],
-      category: 60,
-      categories: [-1, 0, 1, 10, 20, 30, 60, 100, 300],
-      podium: {
-        first: null,
-        second: null,
-        third: null,
-      },
+      category: null,
+      categories: [],
       loading: true,
     }
   },
   head() {
     return {
-      title: 'ピリオドマッチランキング',
+      title: '659ランキング',
     }
   },
   created() {
-    this.fetch()
+    this.fetchCategory()
 
-    this.$nuxt.$on('fetch-button', this.fetch)
+    this.$nuxt.$on('fetch-button', this.fetchCategory)
   },
   methods: {
-    fetch() {
+    fetchCategory() {
+      this.categories = []
+
+      this.loading = true
+      this.$axios
+        .get(`/ranking/659/category`)
+        .then((response: { data: Api659CategoryResponse[] }) => {
+          this.categories = response.data
+
+          this.loading = false
+        })
+        .catch((error: any) => {
+          this.loading = false
+          alert('ピリオドマッチカテゴリの取得に失敗しました。')
+          // eslint-disable-next-line no-console
+          console.error(error)
+        })
+    },
+    fetchRecords() {
+      if (!this.category) {
+        return
+      }
       this.items = []
 
       this.loading = true
       this.$axios
-        .get(`/ranking/periodmatch/${this.category}`)
-        .then((response: { data: PeriodMatchResult[] }) => {
+        .get(`/ranking/659/records/${this.category.categoryId}`)
+        .then((response: { data: Api659RecordResponse[] }) => {
           this.items = response.data
-
-          this.podium = {
-            first: this.items.length > 0 ? this.items[0].player : null,
-            second: this.items.length > 1 ? this.items[1].player : null,
-            third: this.items.length > 2 ? this.items[2].player : null,
-          }
 
           this.loading = false
         })

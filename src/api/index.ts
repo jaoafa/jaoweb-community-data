@@ -5,6 +5,8 @@ import GetRootEndPoint from './endpoints/root'
 import GetCitiesEndPoint from './endpoints/cities'
 import GetRankingPeriodMatchEndPoint from './endpoints/ranking/periodmatch'
 import GetCitiesHistoryEndPoint from './endpoints/cities/_id/history'
+import GetRanking659CategoryEndPoint from './endpoints/ranking/659/category'
+import GetRanking659RecordsEndPoint from './endpoints/ranking/659/records'
 
 const app = express()
 app.use(expressJson())
@@ -15,6 +17,8 @@ const endpoints: EndPoint[] = [
   new GetCitiesEndPoint(app),
   new GetRankingPeriodMatchEndPoint(app),
   new GetCitiesHistoryEndPoint(app),
+  new GetRanking659CategoryEndPoint(app),
+  new GetRanking659RecordsEndPoint(app),
 ]
 
 for (const endpoint of endpoints) {

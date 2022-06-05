@@ -10,6 +10,9 @@ interface ConfigStructure {
       database: string
     }
   }
+  apiUrl: {
+    '659': string
+  }
 }
 
 export default function (): ConfigStructure {
