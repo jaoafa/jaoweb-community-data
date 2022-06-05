@@ -1,7 +1,9 @@
 <template>
   <v-container fluid>
     <p>
-      jao Minecraft Server に関する様々なデータを提供しています。<br />PCでの閲覧を推奨しています。（スマートフォンやタブレットでは正常に表示されない可能性があります）
+      jao Minecraft Server
+      に関する様々なデータを提供しています。クリックできない項目は未実装です。<br />
+      PCでの閲覧を推奨しています。（スマートフォンやタブレットでは正常に表示されない可能性があります）
     </p>
     <p>
       意見や不具合報告は<a
@@ -17,6 +19,7 @@
           :key="item.path"
           :value="true"
           :prepend-icon="item.icon"
+          disabled
           no-action
         >
           <template #activator>
