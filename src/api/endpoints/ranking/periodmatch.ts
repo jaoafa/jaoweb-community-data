@@ -62,6 +62,8 @@ export default class GetRankingPeriodMatchEndPoint extends EndPoint {
       oldCalc = row.calc
     }
 
+    conn.destroy()
+
     res.json(results)
   }
 }

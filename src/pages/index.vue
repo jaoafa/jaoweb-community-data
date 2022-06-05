@@ -88,24 +88,6 @@ export default Vue.extend({
               name: '登録自治体一覧',
               description: '運営によって承認され、登録されている自治体の一覧',
             },
-            {
-              path: '/cities/new-requests',
-              icon: 'mdi-map-marker-plus-outline',
-              name: '新規登録申請一覧',
-              description: '自治体の新規登録申請の一覧',
-            },
-            {
-              path: '/cities/edit-requests',
-              icon: 'mdi-map-search-outline',
-              name: '情報更新申請一覧',
-              description: '自治体の情報更新申請の一覧',
-            },
-            {
-              path: '/cities/edit-requests',
-              icon: 'mdi-map-marker-minus-outline',
-              name: '情報更新申請一覧',
-              description: '自治体の情報更新申請の一覧',
-            },
           ],
         },
         {

@@ -75,7 +75,7 @@
 
         <v-row>
           <v-col cols="12">
-            <ChangeLogTimeline />
+            <ChangeLogTimeline :city="getSelectCity()" />
           </v-col>
         </v-row>
       </v-col>
@@ -124,7 +124,7 @@ export default Vue.extend({
     fetch() {
       this.items = []
 
-      this.$axios.get('/api/cities').then((response: { data: City[] }) => {
+      this.$axios.get('/cities').then((response: { data: City[] }) => {
         this.items = response.data
 
         if (this.$route.params.id) {

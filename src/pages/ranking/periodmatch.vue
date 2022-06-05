@@ -2,6 +2,8 @@
   <v-container fluid>
     <h2>ピリオドマッチランキング</h2>
 
+    <p>PeriodMatch (無印) のデータはこのランキングに含まれていません。</p>
+
     <v-select
       v-model="category"
       label="表示するカテゴリ"
@@ -122,7 +124,7 @@ export default Vue.extend({
 
       this.loading = true
       this.$axios
-        .get(`/api/ranking/periodmatch/${this.category}`)
+        .get(`/ranking/periodmatch/${this.category}`)
         .then((response: { data: PeriodMatchResult[] }) => {
           this.items = response.data
 

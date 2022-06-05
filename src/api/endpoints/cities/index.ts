@@ -42,6 +42,8 @@ export default class GetCitiesEndPoint extends EndPoint {
       }
     })
 
+    conn.destroy()
+
     res.json(results)
   }
 }
