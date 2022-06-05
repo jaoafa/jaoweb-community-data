@@ -3,7 +3,7 @@
     <div class="text-h4 change-logs-title">変更履歴</div>
     <div class="change-logs">
       <div v-if="!loading && items.length !== 0" class="change-items">
-        <div v-for="item of items" :key="item" class="change-item">
+        <div v-for="(item, i) in items" :key="i" class="change-item">
           <div class="item-dot"></div>
           <div class="item-body">
             <div class="text-h5 item-title" v-text="item.title" />

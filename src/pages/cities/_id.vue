@@ -29,9 +29,13 @@
         </v-card>
       </v-col>
 
+      <v-col v-if="getSelectCity() == null" cols="8">
+        <p>左側のリストから自治体を選択してください。</p>
+      </v-col>
+
       <v-col v-if="getSelectCity() != null" cols="8">
         <v-row>
-          <v-col cols="12">
+          <v-col cols="10">
             <h2 class="text-h4 city-owner-text">
               <span class="city-border" />
               <span class="city-title">{{ getSelectCity().name }}</span>
@@ -48,6 +52,27 @@
                 {{ getSelectCity().owner.mcid }}
               </a>
             </h2>
+          </v-col>
+          <v-col cols="2" class="text-right">
+            <v-btn
+              icon
+              elevation="5"
+              large
+              :disabled="selectedItem == 0"
+              @click="prev()"
+            >
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              elevation="5"
+              large
+              class="mx-3"
+              :disabled="selectedItem == items.length - 1"
+              @click="next()"
+            >
+              <v-icon>mdi-arrow-right</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
 
@@ -69,7 +94,7 @@
             <v-textarea solo readonly :value="getSelectCity().nameOrigin" />
           </v-col>
           <v-col cols="6">
-            <v-img src="assets/dummy.png" />
+            <iframe class="dynmap-iframe" :src="dynmapUrl"></iframe>
           </v-col>
         </v-row>
 
@@ -85,17 +110,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import City from '~/api/models/city'
+import City, { Corner } from '~/api/models/city'
 
 export default Vue.extend({
   name: 'CitiesIndexPage',
   data(): {
     selectedItem: string
     items: City[]
+    dynmapUrl: string
   } {
     return {
       selectedItem: '',
       items: [],
+      dynmapUrl: '',
     }
   },
   head() {
@@ -113,6 +140,8 @@ export default Vue.extend({
         return
       }
       history.replaceState({}, '', 'cities/' + city.id.toString())
+      this.$route.params.id = city.id.toString()
+      this.dynmapUrl = this.getDynmapUrl(city)
     },
   },
   created() {
@@ -134,6 +163,8 @@ export default Vue.extend({
             )
             .toString()
         }
+        const city = this.getSelectCity()
+        if (city) this.dynmapUrl = this.getDynmapUrl(city)
       })
     },
     getMinecraftAvatar(uuid: string) {
@@ -141,6 +172,39 @@ export default Vue.extend({
         return '/community/jaoafa.png'
       }
       return `https://crafatar.com/avatars/${uuid}?size=40&overlay`
+    },
+    getDynmapUrl(city: City) {
+      const x = city.corners.map((corner: Corner) => corner.x)
+      const z = city.corners.map((corner: Corner) => corner.z)
+
+      const max = Math.max(
+        Math.max(...x) - Math.min(...x),
+        Math.max(...z) - Math.min(...z)
+      )
+
+      const center = {
+        x: (Math.min(...x) + Math.max(...x)) / 2,
+        z: (Math.min(...z) + Math.max(...z)) / 2,
+      }
+
+      let zoom
+      if (max < 50) {
+        zoom = 6
+      } else if (max < 120) {
+        zoom = 5
+      } else if (max < 240) {
+        zoom = 4
+      } else if (max < 520) {
+        zoom = 3
+      } else if (max < 900) {
+        zoom = 2
+      } else if (max < 2500) {
+        zoom = 1
+      } else {
+        zoom = 0
+      }
+
+      return `https://map.jaoafa.com/?worldname=Jao_Afa&mapname=flat&zoom=${zoom}&x=${center.x}&y=100&z=${center.z}`
     },
     getSelectCity() {
       if (this.selectedItem === '') {
@@ -161,6 +225,12 @@ export default Vue.extend({
       this.$copyText(text)
         .then(() => alert(`「${text}」をコピーしました。`))
         .catch(() => alert(`「${text}」をコピーできませんでした。`))
+    },
+    prev() {
+      this.selectedItem = (parseInt(this.selectedItem, 10) - 1).toString()
+    },
+    next() {
+      this.selectedItem = (parseInt(this.selectedItem, 10) + 1).toString()
     },
   },
 })
@@ -188,5 +258,10 @@ export default Vue.extend({
   padding: 8px 10px;
   border-radius: 5px;
   text-decoration: none;
+}
+
+.dynmap-iframe {
+  width: 100%;
+  height: 500px;
 }
 </style>
