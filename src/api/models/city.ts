@@ -5,7 +5,7 @@ export interface Corner {
 }
 
 export default interface City {
-  id: string
+  id: number
   name: string
   nameRuby: string
   regionName: string

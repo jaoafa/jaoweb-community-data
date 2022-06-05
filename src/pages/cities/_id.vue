@@ -103,6 +103,18 @@ export default Vue.extend({
       title: '登録自治体一覧',
     }
   },
+  watch: {
+    selectedItem() {
+      const city = this.getSelectCity()
+      if (city == null) {
+        return
+      }
+      if (this.$route.params.id === city.id.toString()) {
+        return
+      }
+      history.replaceState({}, '', 'cities/' + city.id.toString())
+    },
+  },
   created() {
     this.fetch()
 
@@ -114,6 +126,14 @@ export default Vue.extend({
 
       this.$axios.get('/api/cities').then((response: { data: City[] }) => {
         this.items = response.data
+
+        if (this.$route.params.id) {
+          this.selectedItem = this.items
+            .findIndex(
+              (item: City) => item.id.toString() === this.$route.params.id
+            )
+            .toString()
+        }
       })
     },
     getMinecraftAvatar(uuid: string) {
@@ -123,10 +143,21 @@ export default Vue.extend({
       return `https://crafatar.com/avatars/${uuid}?size=40&overlay`
     },
     getSelectCity() {
-      return this.items[parseInt(this.selectedItem, 10)]
+      if (this.selectedItem === '') {
+        return null
+      }
+      const i = parseInt(this.selectedItem, 10)
+      if (this.items.length <= i) {
+        return null
+      }
+      return this.items[i]
     },
     copyRegionName() {
-      const text = this.getSelectCity().regionName
+      const city = this.getSelectCity()
+      if (city == null) {
+        return
+      }
+      const text = city.regionName
       this.$copyText(text)
         .then(() => alert(`「${text}」をコピーしました。`))
         .catch(() => alert(`「${text}」をコピーできませんでした。`))

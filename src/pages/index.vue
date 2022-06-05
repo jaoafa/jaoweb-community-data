@@ -22,7 +22,7 @@
             :key="link.path"
             nuxt
             :to="link.path"
-            :disabled="!isExists(link.path)"
+            :disabled="!isExists(link.path, link.route)"
           >
             <v-list-item-icon>
               <v-icon v-text="link.icon" />
@@ -47,6 +47,7 @@ import Vue from 'vue'
 
 interface Link {
   path: string
+  route?: string
   icon: string
   name: string
   description?: string
@@ -82,6 +83,7 @@ export default Vue.extend({
           links: [
             {
               path: '/cities',
+              route: '/cities/:id?',
               icon: 'mdi-city-variant-outline',
               name: '登録自治体一覧',
               description: '運営によって承認され、登録されている自治体の一覧',
@@ -131,10 +133,11 @@ export default Vue.extend({
     }
   },
   methods: {
-    isExists(path: string): boolean {
+    isExists(path: string, route: string | undefined): boolean {
       return (
         this.$router.options.routes?.some(
-          (page: { path: string }) => page.path === path
+          (page: { path: string }) =>
+            page.path === path || (route && page.path === route)
         ) ?? false
       )
     },
