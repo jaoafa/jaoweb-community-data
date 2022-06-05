@@ -123,25 +123,31 @@ export default Vue.extend({
       this.items = []
 
       this.loading = true
-      this.$axios
-        .get(`/ranking/periodmatch/${this.category}`)
-        .then((response: { data: PeriodMatchResult[] }) => {
-          this.items = response.data
+      this.$recaptcha.execute('login').then((token: string) => {
+        this.$axios
+          .get(`/ranking/periodmatch/${this.category}`, {
+            headers: {
+              'X-RECAPTCHA-TOKEN': token,
+            },
+          })
+          .then((response: { data: PeriodMatchResult[] }) => {
+            this.items = response.data
 
-          this.podium = {
-            first: this.items.length > 0 ? this.items[0].player : null,
-            second: this.items.length > 1 ? this.items[1].player : null,
-            third: this.items.length > 2 ? this.items[2].player : null,
-          }
+            this.podium = {
+              first: this.items.length > 0 ? this.items[0].player : null,
+              second: this.items.length > 1 ? this.items[1].player : null,
+              third: this.items.length > 2 ? this.items[2].player : null,
+            }
 
-          this.loading = false
-        })
-        .catch((error: any) => {
-          this.loading = false
-          alert('ピリオドマッチランキングの取得に失敗しました。')
-          // eslint-disable-next-line no-console
-          console.error(error)
-        })
+            this.loading = false
+          })
+          .catch((error: any) => {
+            this.loading = false
+            alert('ピリオドマッチランキングの取得に失敗しました。')
+            // eslint-disable-next-line no-console
+            console.error(error)
+          })
+      })
     },
     getMinecraftAvatar(uuid: string) {
       if (uuid === null || uuid === 'null') {

@@ -108,19 +108,25 @@ export default Vue.extend({
       this.categories = []
 
       this.loading = true
-      this.$axios
-        .get(`/ranking/659/category`)
-        .then((response: { data: Api659CategoryResponse[] }) => {
-          this.categories = response.data
+      this.$recaptcha.execute('login').then((token: string) => {
+        this.$axios
+          .get(`/ranking/659/category`, {
+            headers: {
+              'X-RECAPTCHA-TOKEN': token,
+            },
+          })
+          .then((response: { data: Api659CategoryResponse[] }) => {
+            this.categories = response.data
 
-          this.loading = false
-        })
-        .catch((error: any) => {
-          this.loading = false
-          alert('ピリオドマッチカテゴリの取得に失敗しました。')
-          // eslint-disable-next-line no-console
-          console.error(error)
-        })
+            this.loading = false
+          })
+          .catch((error: any) => {
+            this.loading = false
+            alert('ピリオドマッチカテゴリの取得に失敗しました。')
+            // eslint-disable-next-line no-console
+            console.error(error)
+          })
+      })
     },
     fetchRecords() {
       if (!this.category) {
@@ -129,19 +135,25 @@ export default Vue.extend({
       this.items = []
 
       this.loading = true
-      this.$axios
-        .get(`/ranking/659/records/${this.category.categoryId}`)
-        .then((response: { data: Api659RecordResponse[] }) => {
-          this.items = response.data
+      this.$recaptcha.execute('login').then((token: string) => {
+        this.$axios
+          .get(`/ranking/659/records/${this.category?.categoryId}`, {
+            headers: {
+              'X-RECAPTCHA-TOKEN': token,
+            },
+          })
+          .then((response: { data: Api659RecordResponse[] }) => {
+            this.items = response.data
 
-          this.loading = false
-        })
-        .catch((error: any) => {
-          this.loading = false
-          alert('ピリオドマッチランキングの取得に失敗しました。')
-          // eslint-disable-next-line no-console
-          console.error(error)
-        })
+            this.loading = false
+          })
+          .catch((error: any) => {
+            this.loading = false
+            alert('ピリオドマッチランキングの取得に失敗しました。')
+            // eslint-disable-next-line no-console
+            console.error(error)
+          })
+      })
     },
     getMinecraftAvatar(uuid: string) {
       if (uuid === null || uuid === 'null') {

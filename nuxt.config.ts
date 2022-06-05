@@ -1,11 +1,14 @@
 import { resolve } from 'path'
 import { NuxtConfig } from '@nuxt/types'
+import loadConfig from '~/api/lib/loadConfig'
 
 const baseName = process.env.BASE_NAME || 'jao Minecraft Server Community'
 const baseUrl = process.env.BASE_URL || 'https://jaoafa.com'
 const baseDir = process.env.BASE_DIR || '/community/'
 const baseDescription =
   process.env.BASE_DESCRIPTION || 'jao Minecraft Server Community Site'
+
+const jsonConfig = loadConfig()
 
 const config: NuxtConfig = {
   srcDir: 'src/',
@@ -97,7 +100,7 @@ const config: NuxtConfig = {
     '@nuxtjs/vuetify',
   ],
 
-  modules: ['@nuxtjs/axios', 'nuxt-clipboard2'],
+  modules: ['@nuxtjs/axios', 'nuxt-clipboard2', '@nuxtjs/recaptcha'],
 
   axios: {
     baseURL: baseDir + 'api',
@@ -132,6 +135,12 @@ const config: NuxtConfig = {
 
   alias: {
     '~/*': resolve(__dirname, 'src/*'),
+  },
+
+  recaptcha: {
+    siteKey: jsonConfig.recaptcha.key,
+    version: 3,
+    hideBadge: true,
   },
 
   telemetry: false,

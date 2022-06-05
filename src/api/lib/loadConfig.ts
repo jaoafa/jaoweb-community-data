@@ -13,6 +13,10 @@ interface ConfigStructure {
   apiUrl: {
     '659': string
   }
+  recaptcha: {
+    key: string
+    secret: string
+  }
 }
 
 export default function (): ConfigStructure {

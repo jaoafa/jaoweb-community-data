@@ -84,19 +84,25 @@ export default Vue.extend({
       this.items = []
 
       this.loading = true
-      this.$axios
-        .get(`/cities/${this.city.id}/history`)
-        .then((response: { data: CityChange[] }) => {
-          this.items = this.processItems(response.data)
+      this.$recaptcha.execute('login').then((token: string) => {
+        this.$axios
+          .get(`/cities/${this.city.id}/history`, {
+            headers: {
+              'X-RECAPTCHA-TOKEN': token,
+            },
+          })
+          .then((response: { data: CityChange[] }) => {
+            this.items = this.processItems(response.data)
 
-          this.loading = false
-        })
-        .catch((error: any) => {
-          this.loading = false
-          alert('自治体更新履歴の取得に失敗しました。')
-          // eslint-disable-next-line no-console
-          console.error(error)
-        })
+            this.loading = false
+          })
+          .catch((error: any) => {
+            this.loading = false
+            alert('自治体更新履歴の取得に失敗しました。')
+            // eslint-disable-next-line no-console
+            console.error(error)
+          })
+      })
     },
     processItems(changes: CityChange[]) {
       const items: Item[] = []

@@ -153,18 +153,26 @@ export default Vue.extend({
     fetch() {
       this.items = []
 
-      this.$axios.get('/cities').then((response: { data: City[] }) => {
-        this.items = response.data
+      this.$recaptcha.execute('login').then((token: string) => {
+        this.$axios
+          .get('/cities', {
+            headers: {
+              'X-RECAPTCHA-TOKEN': token,
+            },
+          })
+          .then((response: { data: City[] }) => {
+            this.items = response.data
 
-        if (this.$route.params.id) {
-          this.selectedItem = this.items
-            .findIndex(
-              (item: City) => item.id.toString() === this.$route.params.id
-            )
-            .toString()
-        }
-        const city = this.getSelectCity()
-        if (city) this.dynmapUrl = this.getDynmapUrl(city)
+            if (this.$route.params.id) {
+              this.selectedItem = this.items
+                .findIndex(
+                  (item: City) => item.id.toString() === this.$route.params.id
+                )
+                .toString()
+            }
+            const city = this.getSelectCity()
+            if (city) this.dynmapUrl = this.getDynmapUrl(city)
+          })
       })
     },
     getMinecraftAvatar(uuid: string) {
