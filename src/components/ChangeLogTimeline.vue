@@ -283,7 +283,7 @@ export default Vue.extend({
   position: absolute;
   top: 240px;
   left: 100px;
-  width: 1000px;
+  width: 100vw;
   border-bottom: 10px solid #fff;
 }
 
