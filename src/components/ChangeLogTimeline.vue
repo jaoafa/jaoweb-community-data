@@ -1,20 +1,21 @@
 <template>
-  <div class="change-logs">
+  <div class="change-logs-wrapper">
     <div class="text-h4 change-logs-title">変更履歴</div>
-
-    <div class="change-items">
-      <div v-for="item of items" :key="item.title" class="change-item">
-        <div class="item-dot"></div>
-        <div class="item-body">
-          <div class="text-h5 item-title" v-text="item.title" />
-          <div class="item-description" v-text="item.description" />
+    <div class="change-logs">
+      <div class="change-items">
+        <div v-for="item of items" :key="item.title" class="change-item">
+          <div class="item-dot"></div>
+          <div class="item-body">
+            <div class="text-h5 item-title" v-text="item.title" />
+            <div class="item-description" v-text="item.description" />
+          </div>
+          <div class="item-date" v-text="item.date" />
+          <div v-if="item.pending" class="item-pending">Pending</div>
         </div>
-        <div class="item-date" v-text="item.date" />
-        <div v-if="item.pending" class="item-pending">Pending</div>
       </div>
-      <div class="change-now">
-        <div class="change-border"></div>
-      </div>
+    </div>
+    <div class="change-now">
+      <div class="change-border"></div>
     </div>
   </div>
 </template>
@@ -109,13 +110,18 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.change-logs-wrapper {
+  position: relative;
+  color: #fff;
+  background: #1c1c1c;
+}
+
 .change-logs {
   position: relative;
-  width: 100%;
 
-  background: #1c1c1c;
-  color: #fff;
-  height: 300px;
+  overflow-x: scroll;
+
+  height: 330px;
 }
 
 .change-logs-title {
@@ -149,6 +155,7 @@ export default Vue.extend({
   border-radius: 50%;
   border: 5px solid #fff;
   background: #ffb41d;
+  z-index: 10;
 }
 
 .change-item .item-body {
@@ -189,12 +196,13 @@ export default Vue.extend({
 }
 
 .change-now {
-  position: relative;
+  overflow-x: hidden;
 }
 
 .change-now .change-border {
   position: absolute;
-  top: 90px;
+  top: 240px;
+  left: 100px;
   width: 1000px;
   border-bottom: 10px solid #fff;
 }
