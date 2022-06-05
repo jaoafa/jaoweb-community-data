@@ -75,13 +75,13 @@ export default Vue.extend({
     return {
       items: [
         {
-          name: 'ユーザー',
+          name: 'ユーザ',
           icon: 'mdi-account-circle',
           links: [
             {
-              path: '/users/limited-verified',
+              path: '/users/perm-groups',
               icon: 'mdi-account-multiple',
-              name: 'Limited Verified 対象者一覧',
+              name: '権限グループ別プレイヤーリスト',
             },
           ],
         },
