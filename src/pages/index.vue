@@ -111,6 +111,17 @@ export default Vue.extend({
             },
           ],
         },
+        {
+          name: 'その他',
+          icon: 'mdi-database-eye',
+          links: [
+            {
+              path: '/other/vcspeaker-params',
+              icon: 'mdi-numeric',
+              name: 'JDA-VCSpeaker デフォルトパラメータ一覧',
+            },
+          ],
+        },
       ],
     }
   },

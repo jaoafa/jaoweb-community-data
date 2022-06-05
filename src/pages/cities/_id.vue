@@ -3,7 +3,7 @@
     <h2>登録自治体一覧</h2>
 
     <v-row>
-      <v-col cols="4">
+      <v-col cols="4" class="col-overflow">
         <v-card tile>
           <v-list>
             <v-list-item-group v-model="selectedItem" color="primary">
@@ -33,9 +33,9 @@
         <p>左側のリストから自治体を選択してください。</p>
       </v-col>
 
-      <v-col v-if="getSelectCity() != null" cols="8">
+      <v-col v-if="getSelectCity() != null" cols="8" class="col-overflow">
         <v-row>
-          <v-col cols="10">
+          <v-col md="10" cols="12">
             <h2 class="text-h4 city-owner-text">
               <span class="city-border" />
               <span class="city-title">{{ getSelectCity().name }}</span>
@@ -53,7 +53,7 @@
               </a>
             </h2>
           </v-col>
-          <v-col cols="2" class="text-right">
+          <v-col md="2" cols="12" class="text-right">
             <v-btn
               icon
               elevation="5"
@@ -245,6 +245,11 @@ export default Vue.extend({
 </script>
 
 <style>
+.col-overflow {
+  overflow-y: scroll;
+  height: calc(100vh - 100px);
+}
+
 .city-border {
   border: 4px solid #ffb41d;
   border-radius: 1em;
