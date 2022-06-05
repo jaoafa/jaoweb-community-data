@@ -119,6 +119,11 @@ export default Vue.extend({
             this.categories = response.data
 
             this.loading = false
+
+            if (this.categories.length > 0) {
+              this.category = this.categories[0]
+              this.fetchRecords()
+            }
           })
           .catch((error: any) => {
             this.loading = false

@@ -1,7 +1,9 @@
 <template>
   <v-container fluid>
     <p>
-      jao Minecraft Server に関する様々なデータを提供しています。<br />
+      jao Minecraft Server に関する様々なデータを提供しています。<br />PCでの閲覧を推奨しています。（スマートフォンやタブレットでは正常に表示されない可能性があります）
+    </p>
+    <p>
       意見や不具合報告は<a
         href="https://github.com/jaoafa/jaoweb-community-data/issues/new/choose"
         >こちら</a
