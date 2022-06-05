@@ -1,8 +1,11 @@
 <template>
   <v-container fluid>
     <p>
-      このサイトは jao Minecraft Server
-      のコミュニティサイトです。メインサイトと分離して開発されています。
+      jao Minecraft Server に関する様々なデータを提供しています。<br />
+      意見や不具合報告は<a
+        href="https://github.com/jaoafa/jaoweb-community-data/issues/new/choose"
+        >こちら</a
+      >から。
     </p>
 
     <v-card>

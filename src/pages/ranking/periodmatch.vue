@@ -151,7 +151,7 @@ export default Vue.extend({
     },
     getMinecraftAvatar(uuid: string) {
       if (uuid === null || uuid === 'null') {
-        return '/community/jaoafa.png'
+        return this.$router.history.base + '/jaoafa.png'
       }
       return `https://crafatar.com/avatars/${uuid}?size=40&overlay`
     },

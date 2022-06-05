@@ -2,11 +2,12 @@ import { resolve } from 'path'
 import { NuxtConfig } from '@nuxt/types'
 import loadConfig from '~/api/lib/loadConfig'
 
-const baseName = process.env.BASE_NAME || 'jao Minecraft Server Community'
+const baseName = process.env.BASE_NAME || 'jao Minecraft Server Data'
 const baseUrl = process.env.BASE_URL || 'https://jaoafa.com'
-const baseDir = process.env.BASE_DIR || '/community/'
+const baseDir = process.env.BASE_DIR || '/data/'
 const baseDescription =
-  process.env.BASE_DESCRIPTION || 'jao Minecraft Server Community Site'
+  process.env.BASE_DESCRIPTION ||
+  'jao Minecraft Server に関する様々なデータを提供しています。'
 
 const jsonConfig = loadConfig()
 

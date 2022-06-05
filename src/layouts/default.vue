@@ -5,7 +5,7 @@
         <AppLogo width="64px" />
       </nuxt-link>
       <nuxt-link to="/" tag="div" style="cursor: pointer" class="mx-3">
-        <v-toolbar-title class="text-h4">jMS Community</v-toolbar-title>
+        <v-toolbar-title class="text-h4">jMS Data</v-toolbar-title>
       </nuxt-link>
       <v-spacer />
       <v-btn icon elevation="3" class="mx-1" @click="fetchButton()">
