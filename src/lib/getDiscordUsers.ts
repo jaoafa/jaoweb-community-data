@@ -1,4 +1,4 @@
-import { DiscordUser } from '~/api/models/discord-users'
+import { DiscordUser } from '../api/models/discord-users'
 
 export default function getDiscordUsers(
   $recaptcha: any,
