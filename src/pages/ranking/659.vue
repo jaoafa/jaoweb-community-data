@@ -77,13 +77,13 @@ export default Vue.extend({
         {
           text: '時間差 (ms)',
           align: 'center',
-          sortable: false,
+          sortable: true,
           value: 'diff',
         },
         {
           text: '投稿日',
           align: 'center',
-          sortable: false,
+          sortable: true,
           value: 'postedAt',
         },
       ],
