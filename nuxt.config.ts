@@ -1,4 +1,5 @@
 import { resolve } from 'path'
+import fs from 'fs'
 import { NuxtConfig } from '@nuxt/types'
 import loadConfig from '~/api/lib/loadConfig'
 
@@ -9,7 +10,7 @@ const baseDescription =
   process.env.BASE_DESCRIPTION ||
   'jao Minecraft Server に関する様々なデータを提供しています。'
 
-const jsonConfig = loadConfig()
+const jsonConfig = fs.existsSync('config.json') ? loadConfig() : null
 
 const config: NuxtConfig = {
   srcDir: 'src/',
@@ -138,11 +139,13 @@ const config: NuxtConfig = {
     '~/*': resolve(__dirname, 'src/*'),
   },
 
-  recaptcha: {
-    siteKey: jsonConfig.recaptcha.key,
-    version: 3,
-    hideBadge: true,
-  },
+  recaptcha: jsonConfig
+    ? {
+        siteKey: jsonConfig.recaptcha.key,
+        version: 3,
+        hideBadge: true,
+      }
+    : {},
 
   telemetry: false,
 }
