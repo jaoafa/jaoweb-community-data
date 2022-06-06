@@ -2,7 +2,9 @@
   <v-container fluid>
     <h2>ピリオドマッチランキング</h2>
 
-    <p>PeriodMatch (無印) のデータはこのランキングに含まれていません。</p>
+    <p class="mb-5">
+      PeriodMatch (無印) のデータはこのランキングに含まれていません。
+    </p>
 
     <v-select
       v-model="category"
@@ -26,7 +28,7 @@
       <v-data-table
         :headers="headers"
         :items="items"
-        :items-per-page="50"
+        :items-per-page="15"
         :loading="loading"
         class="elevation-1"
       >
@@ -116,7 +118,34 @@ export default Vue.extend({
       title: 'ピリオドマッチランキング',
     }
   },
+  watch: {
+    category() {
+      if (this.$route.params.category === this.category.toString()) {
+        return
+      }
+      history.replaceState(
+        {},
+        '',
+        'ranking/periodmatch/' + this.category.toString()
+      )
+      this.$route.params.category = this.category.toString()
+    },
+  },
   created() {
+    if (this.$route.params.category) {
+      this.category =
+        this.categories.find(
+          (item: number) => item.toString() === this.$route.params.categories
+        ) ?? 60
+    } else if (typeof history !== 'undefined') {
+      history.replaceState(
+        {},
+        '',
+        'ranking/periodmatch/' + this.category.toString()
+      )
+      this.$route.params.category = this.category.toString()
+    }
+
     this.fetch()
 
     this.$nuxt.$on('fetch-button', this.fetch)

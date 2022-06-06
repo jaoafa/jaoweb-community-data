@@ -2,7 +2,9 @@
   <v-container fluid>
     <h2>権限グループ別プレイヤーリスト</h2>
 
-    <p></p>
+    <p class="mb-5">
+      Default権限グループは、他の権限グループに所属していないプレイヤーに付与されるため記載しておりません。
+    </p>
 
     <v-select
       v-model="group"
@@ -23,7 +25,7 @@
       <v-data-table
         :headers="headers"
         :items="items"
-        :items-per-page="50"
+        :items-per-page="15"
         :loading="loading"
         class="elevation-1"
       >
@@ -77,6 +79,7 @@ export default Vue.extend({
     this.fetchGroups()
 
     this.$nuxt.$on('fetch-button', this.fetchGroups)
+    this.$nuxt.$on('fetch-button', this.fetchPlayers)
   },
   methods: {
     fetchGroups() {
@@ -95,7 +98,14 @@ export default Vue.extend({
 
             this.loading = false
 
-            if (this.groups.length > 0) {
+            if (this.$route.params.group) {
+              this.group =
+                this.groups.find(
+                  (item: PermissionGroup) =>
+                    item.key.toString() === this.$route.params.group
+                ) ?? null
+              this.fetchPlayers()
+            } else if (this.groups.length > 0) {
               this.group = this.groups[0]
               this.fetchPlayers()
             }
@@ -113,6 +123,15 @@ export default Vue.extend({
         return
       }
       this.items = []
+
+      if (this.$route.params.group !== this.group.key.toString()) {
+        history.replaceState(
+          {},
+          '',
+          'users/perm-groups/' + this.group.key.toString()
+        )
+        this.$route.params.group = this.group.key.toString()
+      }
 
       this.loading = true
       this.$recaptcha.execute('login').then((token: string) => {

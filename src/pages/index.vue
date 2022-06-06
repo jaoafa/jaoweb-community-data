@@ -80,6 +80,7 @@ export default Vue.extend({
           links: [
             {
               path: '/users/perm-groups',
+              route: '/users/perm-groups/:group?',
               icon: 'mdi-account-multiple',
               name: '権限グループ別プレイヤーリスト',
             },
@@ -104,11 +105,13 @@ export default Vue.extend({
           links: [
             {
               path: '/ranking/periodmatch',
+              route: '/ranking/periodmatch/:category?',
               icon: 'mdi-format-letter-matches',
               name: 'ピリオドマッチランキング',
             },
             {
               path: '/ranking/659',
+              route: '/ranking/659/:category?',
               icon: 'mdi-clipboard-text-clock-outline',
               name: '659ランキング',
             },

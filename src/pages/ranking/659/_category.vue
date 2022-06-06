@@ -2,7 +2,7 @@
   <v-container fluid>
     <h2>659ランキング</h2>
 
-    <p>
+    <p class="mb-5">
       jMS Gamers Club #659
       で行われている、特定時刻にどれだけ差無く投稿できるかを競っているアレのランキングです。
     </p>
@@ -28,7 +28,7 @@
       <v-data-table
         :headers="headers"
         :items="items"
-        :items-per-page="50"
+        :items-per-page="15"
         :loading="loading"
         class="elevation-1"
       >
@@ -102,6 +102,7 @@ export default Vue.extend({
     this.fetchCategory()
 
     this.$nuxt.$on('fetch-button', this.fetchCategory)
+    this.$nuxt.$on('fetch-button', this.fetchRecords)
   },
   methods: {
     fetchCategory() {
@@ -120,7 +121,14 @@ export default Vue.extend({
 
             this.loading = false
 
-            if (this.categories.length > 0) {
+            if (this.$route.params.category) {
+              this.category =
+                this.categories.find(
+                  (item: Api659CategoryResponse) =>
+                    item.categoryId.toString() === this.$route.params.category
+                ) ?? null
+              this.fetchRecords()
+            } else if (this.categories.length > 0) {
               this.category = this.categories[0]
               this.fetchRecords()
             }
@@ -137,6 +145,16 @@ export default Vue.extend({
       if (!this.category) {
         return
       }
+
+      if (this.$route.params.category !== this.category.categoryId.toString()) {
+        history.replaceState(
+          {},
+          '',
+          'ranking/659/' + this.category.categoryId.toString()
+        )
+        this.$route.params.category = this.category.categoryId.toString()
+      }
+
       this.items = []
 
       this.loading = true
