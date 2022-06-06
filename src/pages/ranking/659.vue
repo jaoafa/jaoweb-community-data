@@ -52,7 +52,7 @@ import {
 } from '~/api/models/659-api-result'
 
 export default Vue.extend({
-  name: 'RankingPeriodMatchPage',
+  name: 'Ranking659Page',
   data(): {
     headers: DataTableHeader[]
     items: Api659RecordResponse[]

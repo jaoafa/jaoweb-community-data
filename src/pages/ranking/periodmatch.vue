@@ -31,6 +31,9 @@
         class="elevation-1"
       >
         <template #[`item.player.mcid`]="{ item }">
+          <v-avatar :size="40" v-on="on">
+            <v-img :src="getMinecraftAvatar(item.player.uuid)"></v-img>
+          </v-avatar>
           <a :href="'https://users.jaoafa.com/' + item.player.uuid">
             {{ item.player.mcid }}
           </a>
@@ -68,31 +71,31 @@ export default Vue.extend({
       headers: [
         {
           text: '順位',
-          align: 'center',
+          align: 'start',
           sortable: true,
           value: 'rank',
         },
         {
           text: '名前',
-          align: 'center',
+          align: 'start',
           sortable: true,
           value: 'player.mcid',
         },
         {
           text: '成功',
-          align: 'center',
+          align: 'start',
           sortable: false,
           value: 'success',
         },
         {
           text: '失敗',
-          align: 'center',
+          align: 'start',
           sortable: false,
           value: 'failure',
         },
         {
           text: '実施日時',
-          align: 'center',
+          align: 'start',
           sortable: false,
           value: 'start_time',
         },
