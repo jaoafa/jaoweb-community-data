@@ -4,6 +4,7 @@
 
     <v-row>
       <v-col cols="4" class="col-overflow">
+        <v-progress-linear v-if="loading.cities" indeterminate />
         <v-card tile>
           <v-list>
             <v-list-item-group v-model="selectedItem" color="primary">
@@ -118,11 +119,17 @@ export default Vue.extend({
     selectedItem: string
     items: City[]
     dynmapUrl: string
+    loading: {
+      cities: boolean
+    }
   } {
     return {
       selectedItem: '',
       items: [],
       dynmapUrl: '',
+      loading: {
+        cities: true,
+      },
     }
   },
   head() {
@@ -152,6 +159,7 @@ export default Vue.extend({
   methods: {
     fetch() {
       this.items = []
+      this.loading.cities = true
 
       this.$recaptcha.execute('login').then((token: string) => {
         this.$axios
@@ -162,6 +170,7 @@ export default Vue.extend({
           })
           .then((response: { data: City[] }) => {
             this.items = response.data
+            this.loading.cities = false
 
             if (this.$route.params.id) {
               this.selectedItem = this.items
