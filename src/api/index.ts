@@ -9,6 +9,9 @@ import GetRanking659CategoryEndPoint from './endpoints/ranking/659/category'
 import GetRanking659RecordsEndPoint from './endpoints/ranking/659/records'
 import GetUsersPermGroups from './endpoints/users/perm-groups/get-groups'
 import GetUsersPermGroupPlayers from './endpoints/users/perm-groups/get-players'
+import GetDiscordUsers from './endpoints/other/discord-users'
+import GetJdaVcSpeakerDefaultParams from './endpoints/other/jda-vcspeaker/default-param'
+import GetJdaVcSpeakerVoiceText from './endpoints/other/jda-vcspeaker/voicetext'
 
 const app = express()
 app.use(expressJson())
@@ -23,6 +26,9 @@ const endpoints: EndPoint[] = [
   new GetRanking659RecordsEndPoint(app),
   new GetUsersPermGroups(app),
   new GetUsersPermGroupPlayers(app),
+  new GetJdaVcSpeakerDefaultParams(app),
+  new GetDiscordUsers(app),
+  new GetJdaVcSpeakerVoiceText(app),
 ]
 
 for (const endpoint of endpoints) {

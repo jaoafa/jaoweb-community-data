@@ -50,6 +50,7 @@ import {
   Api659CategoryResponse,
   Api659RecordResponse,
 } from '~/api/models/659-api-result'
+import { DiscordUser } from '~/api/models/discord-users'
 
 export default Vue.extend({
   name: 'Ranking659Page',
@@ -178,11 +179,8 @@ export default Vue.extend({
           })
       })
     },
-    getMinecraftAvatar(uuid: string) {
-      if (uuid === null || uuid === 'null') {
-        return this.$router.history.base + '/jaoafa.png'
-      }
-      return `https://crafatar.com/avatars/${uuid}?size=40&overlay`
+    getDiscordAvatar(user: DiscordUser): string {
+      return `https://cdn.discordapp.com/avatars/${user.user.id}/${user.user.avatar}.png`
     },
     formatDate(date: Date, format: string): string {
       format = format.replace(/yyyy/g, String(date.getFullYear()))

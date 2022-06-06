@@ -12,11 +12,17 @@ interface ConfigStructure {
   }
   apiUrl: {
     '659': string
+    'jda-vcspeaker': string
   }
   recaptcha: {
     key: string
     secret: string
   }
+  discord: {
+    token: string
+    guildId: string
+  }
+  voiceTextApiKey: string
 }
 
 export default function (): ConfigStructure {

@@ -33,7 +33,7 @@
         class="elevation-1"
       >
         <template #[`item.player.mcid`]="{ item }">
-          <v-avatar :size="40" v-on="on">
+          <v-avatar :size="40">
             <v-img :src="getMinecraftAvatar(item.player.uuid)"></v-img>
           </v-avatar>
           <a :href="'https://users.jaoafa.com/' + item.player.uuid">
