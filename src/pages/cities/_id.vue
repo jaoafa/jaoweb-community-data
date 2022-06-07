@@ -45,12 +45,13 @@
                 class="city-owner"
                 :href="`https://users.jaoafa.com/${getSelectCity().owner.uuid}`"
               >
-                <v-avatar class="city-avatar">
+                <v-avatar class="city-avatar" :size="40">
                   <v-img
                     :src="getMinecraftAvatar(getSelectCity().owner.uuid)"
                   ></v-img>
                 </v-avatar>
-                {{ getSelectCity().owner.mcid }}
+                <span v-if="selectedPlayer">{{ selectedPlayer.mcid }}</span>
+                <span v-else>{{ getSelectCity().owner.mcid }}</span>
               </a>
             </h2>
           </v-col>
@@ -59,6 +60,7 @@
               icon
               elevation="5"
               large
+              class="mx-1"
               :disabled="selectedItem == 0"
               @click="prev()"
             >
@@ -68,7 +70,7 @@
               icon
               elevation="5"
               large
-              class="mx-3"
+              class="mx-1"
               :disabled="selectedItem == items.length - 1"
               @click="next()"
             >
@@ -89,10 +91,35 @@
             ></v-text-field>
 
             <h3>自治体の概要</h3>
-            <v-textarea solo readonly :value="getSelectCity().summary" />
+            <v-textarea
+              solo
+              readonly
+              :rows="3"
+              :value="getSelectCity().summary"
+            />
 
             <h3>自治体名称の由来</h3>
-            <v-textarea solo readonly :value="getSelectCity().nameOrigin" />
+            <v-textarea
+              solo
+              readonly
+              :rows="3"
+              :value="getSelectCity().nameOrigin"
+            />
+
+            <h3>最終ログイン日時</h3>
+
+            <v-textarea
+              v-if="selectedPlayer"
+              solo
+              readonly
+              :rows="1"
+              :value="
+                selectedPlayer.lastlogin +
+                ' (' +
+                calcDiffDays(new Date(), new Date(selectedPlayer.lastlogin)) +
+                '日前)'
+              "
+            />
           </v-col>
           <v-col cols="6">
             <iframe class="dynmap-iframe" :src="dynmapUrl"></iframe>
@@ -112,11 +139,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import City, { Corner } from '~/api/models/city'
+import getMinecraftUser, { MinecraftUser } from '~/lib/getMinecraftUser'
 
 export default Vue.extend({
   name: 'CitiesIndexPage',
   data(): {
     selectedItem: string
+    selectedPlayer: MinecraftUser | null
     items: City[]
     dynmapUrl: string
     loading: {
@@ -125,6 +154,7 @@ export default Vue.extend({
   } {
     return {
       selectedItem: '',
+      selectedPlayer: null,
       items: [],
       dynmapUrl: '',
       loading: {
@@ -138,7 +168,7 @@ export default Vue.extend({
     }
   },
   watch: {
-    selectedItem() {
+    async selectedItem() {
       const city = this.getSelectCity()
       if (city == null) {
         return
@@ -149,6 +179,12 @@ export default Vue.extend({
       history.replaceState({}, '', 'cities/' + city.id.toString())
       this.$route.params.id = city.id.toString()
       this.dynmapUrl = this.getDynmapUrl(city)
+
+      this.selectedPlayer = null
+      this.selectedPlayer = await getMinecraftUser(
+        this.$recaptcha,
+        city.owner.uuid
+      )
     },
   },
   created() {
@@ -159,6 +195,7 @@ export default Vue.extend({
   methods: {
     fetch() {
       this.items = []
+      this.selectedPlayer = null
       this.loading.cities = true
 
       this.$recaptcha.execute('login').then((token: string) => {
@@ -180,7 +217,14 @@ export default Vue.extend({
                 .toString()
             }
             const city = this.getSelectCity()
-            if (city) this.dynmapUrl = this.getDynmapUrl(city)
+            if (city) {
+              this.dynmapUrl = this.getDynmapUrl(city)
+              getMinecraftUser(this.$recaptcha, city.owner.uuid).then(
+                (player) => {
+                  this.selectedPlayer = player
+                }
+              )
+            }
           })
       })
     },
@@ -188,7 +232,7 @@ export default Vue.extend({
       if (uuid === null || uuid === 'null') {
         return this.$router.history.base + '/jaoafa.png'
       }
-      return `https://crafatar.com/avatars/${uuid}?size=40&overlay`
+      return `https://crafatar.com/avatars/${uuid}?size=30&overlay`
     },
     getDynmapUrl(city: City) {
       const x = city.corners.map((corner: Corner) => corner.x)
@@ -249,6 +293,10 @@ export default Vue.extend({
     next() {
       this.selectedItem = (parseInt(this.selectedItem, 10) + 1).toString()
     },
+    calcDiffDays(date1: Date, date2: Date) {
+      const diffTime = Math.abs(date2.getTime() - date1.getTime())
+      return Math.floor(diffTime / (1000 * 60 * 60 * 24))
+    },
   },
 })
 </script>
@@ -271,7 +319,7 @@ export default Vue.extend({
 }
 
 .city-avatar {
-  margin-right: 10px;
+  margin-right: 5px;
   border: 1px solid #7a7a7a;
 }
 
@@ -280,6 +328,7 @@ export default Vue.extend({
   padding: 8px 10px;
   border-radius: 5px;
   text-decoration: none;
+  font-size: 80%;
 }
 
 .dynmap-iframe {
