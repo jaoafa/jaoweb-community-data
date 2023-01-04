@@ -50,7 +50,7 @@ export default class GetRanking659RecordsEndPoint extends EndPoint {
     let rank = 0
     const oldDiff = Number.NaN
     for (const record of data.records
-      .filter((record) => record.category_category_id === categoryId.toString())
+      .filter((record) => record.category_category_id === categoryId)
       .sort((a, b) => Number(a.diff) - Number(b.diff))) {
       rank++
       if (!Number.isNaN(oldDiff) && Number(record.diff) === oldDiff) {

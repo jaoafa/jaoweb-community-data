@@ -18,7 +18,7 @@ interface Api659Record {
   posted_at: string
   created_at: string
   user_id: string
-  category_category_id: string
+  category_category_id: number
 }
 
 interface Api659User {
