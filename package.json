@@ -9,7 +9,7 @@
     "dev": "node -r tsconfig-paths/register ./node_modules/nuxt/bin/nuxt.js",
     "build": "node -r tsconfig-paths/register ./node_modules/nuxt/bin/nuxt.js build",
     "start": "node -r tsconfig-paths/register ./node_modules/nuxt/bin/nuxt.js start",
-    "generate": "nuxt generate",
+    "generate": "node -r tsconfig-paths/register ./node_modules/nuxt/bin/nuxt.js generate",
     "lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
     "lint:style": "stylelint \"**/*.{css,scss,sass,html,vue}\" --ignore-path .gitignore",
     "lint:prettier": "prettier --check .",
