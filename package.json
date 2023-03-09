@@ -41,7 +41,7 @@
     "@nuxtjs/eslint-config-typescript": "12.0.0",
     "@nuxtjs/eslint-module": "4.0.1",
     "@nuxtjs/recaptcha": "1.1.1",
-    "@nuxtjs/stylelint-module": "4.2.0",
+    "@nuxtjs/stylelint-module": "5.0.0",
     "@nuxtjs/vuetify": "1.12.3",
     "@types/cors": "2.8.13",
     "cors": "2.8.5",
